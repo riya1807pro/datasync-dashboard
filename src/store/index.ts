@@ -3,9 +3,11 @@ import { newsApi } from '@/features/news/newApi'
 import { movieApi } from '@/features/movies/movieApi'
 import userPreferencesReducer from '@/features/user/UserApi'
 import { socialApi } from '@/features/social/SocialApi'
+import newsReducer from "../features/news/NewsSlice"
 
 export const store = configureStore({
   reducer: {
+     news: newsReducer,
     userPreferences: userPreferencesReducer,
     [newsApi.reducerPath]: newsApi.reducer,
     [movieApi.reducerPath]: movieApi.reducer,

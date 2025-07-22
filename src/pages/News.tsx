@@ -1,23 +1,45 @@
-// src/pages/news.tsx
-import DashboardLayout from "@/layouts/DashboardLayout";
-import { useGetTopHeadlinesQuery } from "@/features/news/newApi";
+'use client'
+import { useGetTopHeadlinesQuery } from '@/features/news/newApi'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCategory } from '@/features/news/NewsSlice'
+import NewsCard from '@/components/NewsCard'
+
+const categories = ['all', 'technology', 'business', 'sports', 'health', 'entertainment']
 
 export default function NewsPage() {
-  const { data, isLoading, error } = useGetTopHeadlinesQuery(undefined);
-
-  if (isLoading) return <DashboardLayout><p>Loading...</p></DashboardLayout>;
-  if (error) return <DashboardLayout><p>Error fetching news.</p></DashboardLayout>;
+  const category = useSelector((state: any) => state.news?.category)
+  const dispatch = useDispatch()
+  
+  const selectedCategory = category === 'all' ? '' : category;
+  const { data, isLoading } = useGetTopHeadlinesQuery(selectedCategory)
 
   return (
-    <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-4">📰 Top Headlines</h1>
-      <ul className="space-y-4 h-screen overflow-scroll fixed">
-        {data?.articles?.map((article:any, index:number) => (
-          <li key={index} className="p-4 bg-white rounded shadow">
-            <p className="text-sm text-gray-500 mt-1">{article.description}</p>
-          </li>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">Top Headlines - {category}</h1>
+
+      <div className="flex gap-4 mb-4 flex-wrap">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => dispatch(setCategory(cat))}
+            className={`px-3 py-1 rounded ${
+              category === cat ? 'bg-black text-white' : 'bg-gray-200'
+            }`}
+          >
+            {cat}
+          </button>
         ))}
-      </ul>
-    </DashboardLayout>
-  );
+      </div>
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-4">
+          {data?.articles?.map((article: any, i: number) => (
+            <NewsCard article={article} key={i} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
