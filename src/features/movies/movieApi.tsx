@@ -11,6 +11,9 @@ export const movieApi = createApi({
     getTrendingMovies: builder.query<MovieApiResponse,void>({
       query: () => `trending/movie/day?api_key=${API_KEY}`,
     }),
+   getMovieVideos: builder.query({
+  query: (movieId) => `/movie/${movieId}/videos?api_key=${API_KEY}`,
+}),
     getGenres: builder.query({
   query: () => `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
 }),
@@ -25,4 +28,5 @@ export const {
   useGetTrendingMoviesQuery,
   useGetGenresQuery,
   useGetMoviesByGenreQuery,
+  useGetMovieVideosQuery
 } = movieApi;
