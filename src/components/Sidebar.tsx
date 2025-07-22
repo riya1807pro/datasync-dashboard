@@ -12,14 +12,14 @@ export default function Sidebar() {
   const router = useRouter()
 
   return (
-    <aside className="w-64 h-screen bg-gray-900 text-white p-4 overflow-hidden">
-      <h2 className="text-xl font-bold mb-6">DashSync</h2>
-      <ul className="space-y-4">
+    <aside className="w-full h-10  bg-gray-900 text-white p-4 overflow-hidden absolute top-0 z-1">
+      {/* <h2 className="text-xl font-bold ml-6">DashSync</h2> */}
+      <ul className="space-x-4 flex flex-row  ">
         {navLinks.map(link => (
           <li key={link.path}>
             <Link
               href={link.path}
-              className={`block px-4 py-2 rounded hover:bg-gray-700 ${
+              className={`inline py-4 px-2 rounded hover:bg-gray-700 ${
                 router.pathname === link.path ? 'bg-gray-700' : ''
               }`}
             >
