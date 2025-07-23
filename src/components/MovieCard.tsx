@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import { useGetMovieVideosQuery } from "../features/movies/movieApi"
-import { PlayCircle } from 'lucide-react' 
+import { Heart, PlayCircle } from 'lucide-react' 
+import { toggleFavorite } from '@/features/favorite/favoriteSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function MovieCard({ movie }:any) {
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: any) => state.favorites?.favorites)
+const isFav = favorites?.some((fav: any) => fav.id === movie.id)
   const { data: videoData } = useGetMovieVideosQuery(movie.id)
   const trailer = videoData?.results?.find(
     (vid:any) => vid.type === 'Trailer' && vid.site === 'YouTube'
@@ -20,6 +25,12 @@ export default function MovieCard({ movie }:any) {
         alt={movie.title}
         className="rounded mt-2"
       />
+
+      <button
+        onClick={() => dispatch(toggleFavorite(movie))}
+      >
+        <Heart fill={isFav ? 'red' : 'none'} />
+      </button>
 
       {/* Play Button */}
       {trailer && (

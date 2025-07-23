@@ -3,6 +3,7 @@ import { useGetTopHeadlinesQuery } from '@/features/news/newApi'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCategory } from '@/features/news/NewsSlice'
 import NewsCard from '@/components/NewsCard'
+import DashboardLayout from '@/layouts/DashboardLayout'
 
 const categories = ['all', 'technology', 'business', 'sports', 'health', 'entertainment']
 
@@ -14,7 +15,8 @@ export default function NewsPage() {
   const { data, isLoading } = useGetTopHeadlinesQuery(selectedCategory)
 
   return (
-    <div className="p-6">
+   <DashboardLayout>
+     <div className="p-6">
       <h1 className="text-3xl font-bold mb-4">Top Headlines - {category}</h1>
 
       <div className="flex gap-4 mb-4 flex-wrap">
@@ -41,5 +43,6 @@ export default function NewsPage() {
         </div>
       )}
     </div>
+   </DashboardLayout>
   )
 }

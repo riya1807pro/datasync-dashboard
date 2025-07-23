@@ -6,6 +6,7 @@ import {
   useGetMoviesByGenreQuery,
 } from "@/features/movies/movieApi"
 import MovieCard from "@/components/MovieCard"
+import DashboardLayout from "@/layouts/DashboardLayout"
 
 export default function Movies() {
   const [selectedGenre, setSelectedGenre] = useState("")
@@ -26,7 +27,8 @@ export default function Movies() {
   )
 
   return (
-    <div className="p-6 w-full">
+   <DashboardLayout>
+     <div className="p-6 w-full">
       <h2 className="text-3xl font-bold mb-4">🎬 Movies</h2>
 
       <div className="flex flex-wrap gap-4 mb-6">
@@ -58,5 +60,6 @@ export default function Movies() {
         ))}
       </div>
     </div>
+   </DashboardLayout>
   )
 }

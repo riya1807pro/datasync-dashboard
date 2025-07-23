@@ -4,13 +4,15 @@ import { useGetTopHeadlinesQuery } from '@/features/news/newApi'
 import MovieCard from '@/components/MovieCard'
 import NewsCard from '@/components/NewsCard'
 import Link from 'next/link'
+import DashboardLayout from '@/layouts/DashboardLayout'
 
 export default function Home() {
   const { data: trendingData, isLoading: loadingMovies } = useGetTrendingMoviesQuery()
   const { data: newsData, isLoading: loadingNews } = useGetTopHeadlinesQuery('all')
 
   return (
-    <div className="p-6 space-y-10">
+  <DashboardLayout>
+      <div className="p-6 space-y-10">
       {/* Trending Movies */}
       <div>
         <div className="flex justify-between items-center mb-3">
@@ -53,5 +55,6 @@ export default function Home() {
 </section>
 
     </div>
+  </DashboardLayout>
   )
 }
