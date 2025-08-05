@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { newsApi } from '@/features/news/newApi'
 import { movieApi } from '@/features/movies/movieApi'
+import userDataPreferences from '@/features/user/preferencesSlice'
 import userPreferencesReducer from '@/features/user/UserApi'
 import { socialApi } from '@/features/social/SocialApi'
 import newsReducer from "../features/news/NewsSlice"
@@ -8,6 +9,7 @@ import favoritesReducer from "../features/favorite/favoriteSlice"
 
 export const store = configureStore({
   reducer: {
+    userDataPreferences: userPreferencesReducer,
      news: newsReducer,
      favorites:favoritesReducer,
     userPreferences: userPreferencesReducer,

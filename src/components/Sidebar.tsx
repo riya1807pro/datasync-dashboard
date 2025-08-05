@@ -1,33 +1,72 @@
+'use client'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { Menu, X, Film, Newspaper, Home, Users } from 'lucide-react'
+import { ResizableBox } from 'react-resizable'
+import 'react-resizable/css/styles.css'
+import classNames from 'classnames'
 
 const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Movies', path: '/Movie' },
-  { name: 'News', path: '/News' },
-  { name: 'Social', path: '/Social' },
+  { name: 'Home', path: '/', icon: <Home size={18} /> },
+  { name: 'Movies', path: '/Movie', icon: <Film size={18} /> },
+  { name: 'News', path: '/News', icon: <Newspaper size={18} /> },
+  { name: 'Social', path: '/Social', icon: <Users size={18} /> },
 ]
 
 export default function Sidebar() {
-  const router = useRouter()
+  const pathname = usePathname()
+  const [collapsed, setCollapsed] = useState(false)
+  const [width, setWidth] = useState(250)
+
+  const toggleCollapse = () => setCollapsed(!collapsed)
 
   return (
-    <aside className="w-full h-10  bg-gray-900 text-white p-4 overflow-hidden absolute top-0 z-1">
-      {/* <h2 className="text-xl font-bold ml-6">DashSync</h2> */}
-      <ul className="space-x-4 flex flex-row  ">
-        {navLinks.map(link => (
-          <li key={link.path}>
-            <Link
-              href={link.path}
-              className={`inline py-4 px-2 rounded hover:bg-gray-700 ${
-                router.pathname === link.path ? 'bg-gray-700' : ''
-              }`}
-            >
-              {link.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <>
+      {/* Toggle Button (always visible) */}
+      <button
+        className="fixed top-2 left-2 z-50 bg-gray-900 text-white p-2 rounded"
+        onClick={toggleCollapse}
+      >
+        {collapsed ? <Menu size={18} /> : <X size={18} />}
+      </button>
+
+      {/* Sidebar */}
+      <ResizableBox
+        width={collapsed ? 64 : width}
+        height={Infinity}
+        axis="x"
+        minConstraints={[64, 0]}
+        maxConstraints={[400, 0]}
+        resizeHandles={['e']}
+        onResizeStop={(e, data) => {
+          setWidth(data.size.width)
+        }}
+        className="fixed top-0 left-0 h-screen z-40 bg-gray-900 text-white transition-all ease-in-out duration-300 overflow-hidden"
+      >
+        <div className={classNames('h-full flex flex-col', collapsed ? 'w-16' : 'w-full')}>
+          <div className="p-4 text-xl font-bold border-b border-gray-700">
+            {collapsed ? 'D' : 'DashSync'}
+          </div>
+          <ul className="flex-1 p-4 space-y-2">
+            {navLinks.map(link => (
+              <li key={link.path}>
+                <Link
+                  href={link.path}
+                  className={classNames(
+                    'flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-700 transition-colors',
+                    pathname === link.path && 'bg-gray-700',
+                    collapsed && 'justify-center'
+                  )}
+                >
+                  {link.icon}
+                  {!collapsed && <span>{link.name}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </ResizableBox>
+    </>
   )
 }

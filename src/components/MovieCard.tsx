@@ -23,7 +23,7 @@ const isFav = favorites?.some((fav: any) => fav.id === movie.id)
       <img
         src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
         alt={movie.title}
-        className="rounded mt-2"
+        className="rounded mt-2 h-64"
       />
 
       <button
