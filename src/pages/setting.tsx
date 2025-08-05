@@ -32,7 +32,7 @@ export default function SettingsPage() {
                 key={genre}
                 onClick={() => handleGenreToggle(genre)}
                 className={`px-3 py-1 rounded border ${
-                  moviePrefs.includes(genre)
+                  (moviePrefs || []).includes(genre)
                     ? 'bg-black text-white'
                     : 'bg-white text-black'
                 }`}
@@ -52,7 +52,7 @@ export default function SettingsPage() {
                 key={cat}
                 onClick={() => handleNewsToggle(cat)}
                 className={`px-3 py-1 rounded border ${
-                  newsPrefs.includes(cat)
+                  (newsPrefs || []).includes(cat)
                     ? 'bg-black text-white'
                     : 'bg-white text-black'
                 }`}

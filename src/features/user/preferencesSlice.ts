@@ -10,7 +10,7 @@ const initialState: PrefState = {
   newsPrefs: [],
 }
 
-const preferencesSlice = createSlice({
+const DataPreferencesSlice = createSlice({
   name: 'userDataPreferences',
   initialState,
   reducers: {
@@ -31,5 +31,5 @@ const preferencesSlice = createSlice({
   },
 })
 
-export const { setMoviePrefs, setNewsPrefs } = preferencesSlice.actions
-export default preferencesSlice.reducer
+export const { setMoviePrefs, setNewsPrefs } = DataPreferencesSlice.actions
+export default DataPreferencesSlice.reducer

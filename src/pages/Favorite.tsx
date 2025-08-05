@@ -2,6 +2,7 @@
 import { useSelector } from 'react-redux'
 import MovieCard from '@/components/MovieCard'
 import { useEffect, useState } from 'react'
+import DashboardLayout from '@/layouts/DashboardLayout'
 
 export default function FavoritesPage() {
   const [isClient, setIsClient] = useState(false)
@@ -14,6 +15,8 @@ export default function FavoritesPage() {
   if (!isClient) return null
 
   return (
+    <DashboardLayout>
+
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">⭐ Your Favorites</h1>
       {favorites.length === 0 ? (
@@ -26,5 +29,6 @@ export default function FavoritesPage() {
         </div>
       )}
     </div>
+          </DashboardLayout>
   )
 }

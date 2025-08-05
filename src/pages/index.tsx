@@ -27,7 +27,7 @@ export default function Home() {
               trendingData?.results?.slice(0, 6).map((movie: any) => (
                 <div
                   key={movie.id}
-                  className="min-w-[29%] max-w-sm flex-shrink-0"
+                  className="min-w-[20%] max-w-sm flex-shrink-0"
                 >
                   <MovieCard movie={movie} />
                 </div>
