@@ -1,10 +1,7 @@
-// middleware.ts
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware } from '@clerk/nextjs/server';
 
-export default authMiddleware({
-  publicRoutes: ["/","/SignUp","/SignIn"],
-});
-
-export const config = {
-  matcher: ["/((?!_next|.*\\..*).*)"],
+const options: any = {
+  publicRoutes: ['/', '/SignIn(.*)', '/SignUp(.*)'],
 };
+
+export default clerkMiddleware(options);

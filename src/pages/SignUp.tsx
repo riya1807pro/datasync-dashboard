@@ -1,14 +1,5 @@
-import {SignUp} from "@clerk/nextjs"
+import { SignUp } from '@clerk/nextjs'
 
-import React from 'react'
-
-const Signup = () => {
-  return (
-   <>
-      <SignUp path="/SignUp" routing="path" />
-
-   </>
-  )
+export default function SignInPage() {
+  return <SignUp routing="hash" />
 }
-
-export default Signup

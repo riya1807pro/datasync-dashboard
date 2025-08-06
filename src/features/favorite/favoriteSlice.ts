@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-const getInitialFavorites = () => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('favorites')
-    if (saved) return JSON.parse(saved)
-  }
-  return []
+interface FavoriteState {
+  favorites: any[]
 }
 
-const initialState = {
-  favorites: getInitialFavorites(),
+const initialState: FavoriteState = {
+  favorites: [],
 }
 
 const favoriteSlice = createSlice({
@@ -17,9 +13,9 @@ const favoriteSlice = createSlice({
   initialState,
   reducers: {
     toggleFavorite: (state, action: PayloadAction<any>) => {
-      const exists = state.favorites.find((item:any) => item.id === action.payload.id)
+      const exists = state.favorites.find((movie) => movie.id === action.payload.id)
       if (exists) {
-        state.favorites = state.favorites.filter((item:any) => item.id !== action.payload.id)
+        state.favorites = state.favorites.filter((movie) => movie.id !== action.payload.id)
       } else {
         state.favorites.push(action.payload)
       }

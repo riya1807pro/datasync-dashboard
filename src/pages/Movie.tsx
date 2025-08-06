@@ -7,8 +7,12 @@ import {
 } from "@/features/movies/movieApi"
 import MovieCard from "@/components/MovieCard"
 import DashboardLayout from "@/layouts/DashboardLayout"
+import { useUser } from "@clerk/nextjs"
+import { useDispatch } from "react-redux"
 
 export default function Movies() {
+    const { isSignedIn } = useUser()
+  const dispatch = useDispatch()
   const [selectedGenre, setSelectedGenre] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -25,6 +29,20 @@ export default function Movies() {
   const filteredMovies = movieList?.filter((movie: any) =>
     movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
+  
+    if (!isSignedIn) {
+      console.log("User not sig in ")
+      return
+    }
+
+ const toggleFavorite = () => {
+  return {
+    type: 'TOGGLE_FAVORITE',
+  };
+};
+
+dispatch(toggleFavorite());
+
 
   return (
    <DashboardLayout>
@@ -62,4 +80,5 @@ export default function Movies() {
     </div>
    </DashboardLayout>
   )
-}
+
+  }

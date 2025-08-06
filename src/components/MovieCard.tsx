@@ -1,66 +1,120 @@
-import { useState } from 'react'
-import { useGetMovieVideosQuery } from "../features/movies/movieApi"
-import { Heart, PlayCircle } from 'lucide-react' 
-import { toggleFavorite } from '@/features/favorite/favoriteSlice'
-import { useDispatch, useSelector } from 'react-redux'
+'use client'
 
-export default function MovieCard({ movie }:any) {
-  const dispatch = useDispatch();
-  const favorites = useSelector((state: any) => state.favorites?.favorites)
-const isFav = favorites?.some((fav: any) => fav.id === movie.id)
-  const { data: videoData } = useGetMovieVideosQuery(movie.id)
-  const trailer = videoData?.results?.find(
-    (vid:any) => vid.type === 'Trailer' && vid.site === 'YouTube'
+import { useUser } from '@clerk/nextjs'
+import { useEffect, useState, useRef } from 'react'
+import { Heart, Volume2, VolumeX } from 'lucide-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleFavorite } from '@/features/favorite/favoriteSlice'
+import { useGetMovieVideosQuery } from '@/features/movies/movieApi'
+
+export default function MovieCard({ movie }: any) {
+  const { user, isSignedIn } = useUser()
+  const dispatch = useDispatch()
+  const [favorites, setFavorites] = useState<any[]>([])
+  const [isFav, setIsFav] = useState(false)
+  const [showTrailer, setShowTrailer] = useState(false)
+  const [mute, setMute] = useState(true)
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 🎥 Fetch trailer
+  const { data: videosData } = useGetMovieVideosQuery(movie.id)
+  const trailer = videosData?.results?.find(
+    (v: any) => v.type === 'Trailer' && v.site === 'YouTube'
   )
 
-  const [showTrailer, setShowTrailer] = useState(false)
+  // 🎯 Fetch user favorites from Clerk
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!isSignedIn || !user?.id) return
+      try {
+        const res = await fetch(`/api/Favourites?userId=${user.id}`)
+        if (!res.ok) return
+        const data = await res.json()
+        setFavorites(data)
+        setIsFav(data.some((fav: any) => fav.id === movie.id))
+      } catch (err) {
+        console.error('Failed to load favorites', err)
+      }
+    }
+    fetchFavorites()
+  }, [user?.id, isSignedIn, movie.id])
+
+  // 💖 Handle toggle
+  const handleToggleFavorite = async () => {
+    if (!isSignedIn) {
+      alert('Please sign in to add favorites.')
+      return
+    }
+
+    const updatedFavorites = isFav
+      ? favorites.filter((fav: any) => fav.id !== movie.id)
+      : [...favorites, movie]
+
+    setFavorites(updatedFavorites)
+    setIsFav(!isFav)
+    dispatch(toggleFavorite(movie))
+
+    await fetch('/api/Favourites', {
+      method: 'POST',
+      body: JSON.stringify({ userId: user?.id, favorites: updatedFavorites }),
+    })
+  }
 
   return (
-    <div className="relative bg-white rounded shadow p-4">
-      <h2 className="text-lg font-semibold">{movie.title}</h2>
-
-      {/* Poster */}
-      <img
-        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-        alt={movie.title}
-        className="rounded mt-2 h-64"
-      />
-
-      <button
-        onClick={() => dispatch(toggleFavorite(movie))}
-      >
-        <Heart fill={isFav ? 'red' : 'none'} />
-      </button>
-
-      {/* Play Button */}
-      {trailer && (
-        <button
-          onClick={() => setShowTrailer(true)}
-          className="absolute bottom-4 right-4 bg-black bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition"
-        >
-          <PlayCircle className="text-white w-6 h-6" />
-        </button>
-      )}
-
-      {/* Modal */}
-      {showTrailer && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
-          <div className="relative w-[90%] max-w-2xl">
-            <iframe
-              src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1`}
-              className="w-full h-[300px] md:h-[450px] rounded"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
-            <button
-              onClick={() => setShowTrailer(false)}
-              className="absolute top-2 right-2 bg-white rounded-full p-1"
-            >
-              ❌
-            </button>
-          </div>
+    <div
+      className="relative bg-white shadow rounded p-2 w-full transition-all"
+      onMouseEnter={() => {
+        hoverTimeoutRef.current = setTimeout(() => {
+          setShowTrailer(true)
+        }, 2000) // ⏱ 2 sec delay
+      }}
+      onMouseLeave={() => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current)
+        setShowTrailer(false)
+      }}
+    >
+      {/* 🎞️ Trailer */}
+      {showTrailer && trailer ? (
+        <div className="relative">
+          <iframe
+            width="100%"
+            height="250"
+            src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=${mute ? 1 : 0}`}
+            title="Movie Trailer"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            className="rounded"
+          />
+          <button
+            onClick={() => setMute(!mute)}
+            className="absolute bottom-2 right-2 bg-black text-white p-1 rounded-full"
+          >
+            {mute ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </button>
         </div>
+      ) : (
+        <img
+          src={
+            movie?.poster_path
+              ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+              : '/fallback.jpg'
+          }
+          alt={movie?.title || 'No title'}
+          className="rounded h-64 w-full object-cover"
+        />
       )}
+
+      {/* 💖 Title + Fav */}
+      <div className="mt-2 flex justify-between items-center">
+        <h2 className="text-sm font-semibold">{movie.title}</h2>
+        <button onClick={handleToggleFavorite}>
+          <Heart
+            className={`w-5 h-5 transition ${
+              isFav ? 'text-red-500 fill-red-500' : 'text-gray-400'
+            }`}
+          />
+        </button>
+      </div>
     </div>
   )
 }
