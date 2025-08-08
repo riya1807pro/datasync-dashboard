@@ -1,79 +1,76 @@
+// src/components/MovieCard.tsx
 'use client'
-
 import { useUser } from '@clerk/nextjs'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Heart, Volume2, VolumeX } from 'lucide-react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toggleFavorite } from '@/features/favorite/favoriteSlice'
 import { useGetMovieVideosQuery } from '@/features/movies/movieApi'
+import { getUserLocalFavorites, setUserLocalFavorites } from '@/utils/userFavorites'
 
-export default function MovieCard({ movie }: any) {
+type Props = { movie: any }
+
+export default function MovieCard({ movie }: Props) {
   const { user, isSignedIn } = useUser()
   const dispatch = useDispatch()
-  const [favorites, setFavorites] = useState<any[]>([])
   const [isFav, setIsFav] = useState(false)
   const [showTrailer, setShowTrailer] = useState(false)
   const [mute, setMute] = useState(true)
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const hoverTimeoutRef = useRef<number | null>(null)
 
-  // 🎥 Fetch trailer
+  // trailer
   const { data: videosData } = useGetMovieVideosQuery(movie.id)
-  const trailer = videosData?.results?.find(
-    (v: any) => v.type === 'Trailer' && v.site === 'YouTube'
-  )
+  const trailer = videosData?.results?.find((v: any) => v.type === 'Trailer' && v.site === 'YouTube')
 
-  // 🎯 Fetch user favorites from Clerk
+  // init isFav from local favorites for this user
   useEffect(() => {
-    const fetchFavorites = async () => {
-      if (!isSignedIn || !user?.id) return
-      try {
-        const res = await fetch(`/api/Favourites?userId=${user.id}`)
-        if (!res.ok) return
-        const data = await res.json()
-        setFavorites(data)
-        setIsFav(data.some((fav: any) => fav.id === movie.id))
-      } catch (err) {
-        console.error('Failed to load favorites', err)
-      }
+    if (!isSignedIn || !user?.id) {
+      setIsFav(false)
+      return
     }
-    fetchFavorites()
-  }, [user?.id, isSignedIn, movie.id])
+    const local = getUserLocalFavorites(user.id)
+    setIsFav(local.some((m: any) => m.id === movie.id))
+  }, [isSignedIn, user?.id, movie.id])
 
-  // 💖 Handle toggle
-  const handleToggleFavorite = async () => {
+  const handleToggleFavorite = () => {
     if (!isSignedIn) {
-      alert('Please sign in to add favorites.')
+      alert('Please sign in to add to favorites.')
       return
     }
 
-    const updatedFavorites = isFav
-      ? favorites.filter((fav: any) => fav.id !== movie.id)
-      : [...favorites, movie]
-
-    setFavorites(updatedFavorites)
-    setIsFav(!isFav)
+    // update redux (UI)
     dispatch(toggleFavorite(movie))
+    // localStorage per-user update
+    const currentLocal = getUserLocalFavorites(user?.id)
+    const newLocal = currentLocal.some((m: any) => m.id === movie.id)
+      ? currentLocal.filter((m: any) => m.id !== movie.id)
+      : [...currentLocal, movie]
+    setUserLocalFavorites(user?.id, newLocal)
 
-    await fetch('/api/Favourites', {
-      method: 'POST',
-      body: JSON.stringify({ userId: user?.id, favorites: updatedFavorites }),
-    })
+    setIsFav((prev) => !prev)
+    // NOTE: optional: call your /api/favorites to sync with backend if implemented
+  }
+
+  // hover handlers (2s delay)
+  const handleMouseEnter = () => {
+    hoverTimeoutRef.current = window.setTimeout(() => {
+      setShowTrailer(true)
+    }, 2000)
+  }
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    setShowTrailer(false)
   }
 
   return (
     <div
-      className="relative bg-white shadow rounded p-2 w-full transition-all"
-      onMouseEnter={() => {
-        hoverTimeoutRef.current = setTimeout(() => {
-          setShowTrailer(true)
-        }, 2000) // ⏱ 2 sec delay
-      }}
-      onMouseLeave={() => {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current)
-        setShowTrailer(false)
-      }}
+      className="relative bg-white shadow rounded p-2 transition-all"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      {/* 🎞️ Trailer */}
       {showTrailer && trailer ? (
         <div className="relative">
           <iframe
@@ -86,33 +83,25 @@ export default function MovieCard({ movie }: any) {
             className="rounded"
           />
           <button
-            onClick={() => setMute(!mute)}
+            onClick={(e) => { e.stopPropagation(); setMute(!mute) }}
             className="absolute bottom-2 right-2 bg-black text-white p-1 rounded-full"
+            aria-label={mute ? 'Unmute trailer' : 'Mute trailer'}
           >
-            {mute ? <VolumeX size={16} /> : <Volume2 size={16} />}
+            {mute ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </button>
         </div>
       ) : (
         <img
-          src={
-            movie?.poster_path
-              ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-              : '/fallback.jpg'
-          }
+          src={movie?.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/fallback.jpg'}
           alt={movie?.title || 'No title'}
           className="rounded h-64 w-full object-cover"
         />
       )}
 
-      {/* 💖 Title + Fav */}
       <div className="mt-2 flex justify-between items-center">
-        <h2 className="text-sm font-semibold">{movie.title}</h2>
-        <button onClick={handleToggleFavorite}>
-          <Heart
-            className={`w-5 h-5 transition ${
-              isFav ? 'text-red-500 fill-red-500' : 'text-gray-400'
-            }`}
-          />
+        <h2 className="text-sm font-semibold line-clamp-2">{movie.title}</h2>
+        <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(); }}>
+          <Heart className={`w-5 h-5 transition ${isFav ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
         </button>
       </div>
     </div>

@@ -6,9 +6,10 @@ export const movieApi = createApi({
   reducerPath: 'movieApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://api.themoviedb.org/3/' }),
   endpoints: (builder) => ({
-    getTrendingMovies: builder.query({
-      query: () => `trending/movie/day?api_key=${API_KEY}`,
-    }),
+    getTrendingMovies: builder.query<any, void>({
+  query: () => `trending/movie/day?api_key=${API_KEY}`,
+}),
+
     getGenres: builder.query({
       query: () => `genre/movie/list?api_key=${API_KEY}`,
     }),

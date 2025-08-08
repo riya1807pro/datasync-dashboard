@@ -1,4 +1,4 @@
-import { getUserFavorites, updateUserFavorites } from '@/utils/clerkFavorites'
+import { getUserLocalFavorites, setUserLocalFavorites } from '@/utils/userFavorites'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'GET') {
-    const favs = await getUserFavorites(userId)
+    const favs = await getUserLocalFavorites(userId)
     return res.status(200).json(favs)
   }
 
@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!favorites) {
       return res.status(400).json({ error: 'Missing favorites' })
     }
-    await updateUserFavorites(userId, favorites)
+    await setUserLocalFavorites(userId, favorites)
     return res.status(200).json({ success: true })
   }
 
