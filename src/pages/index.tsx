@@ -26,18 +26,26 @@ export default function Home() {
   }
 
   // ✅ Filter Movies
-const filteredMovies = trendingData?.results?.filter((movie: any) =>
-  movie.genre_ids?.some((gid: number) =>
-    (moviePrefs || []).includes(getGenreNameFromId(gid))
-  )
+const filteredMovies = ((moviePrefs || []).length === 0
+  ? trendingData?.results
+  : trendingData?.results?.filter((movie: any) =>
+      movie.genre_ids?.some((gid: number) =>
+        (moviePrefs || []).includes(getGenreNameFromId(gid))
+      )
+    )
 )?.slice(0, 6)
 
+
   // ✅ Filter News
- const filteredNews = newsData?.articles?.filter((article: any) =>
-  newsPrefs.length === 0 || newsPrefs.some((cat: string) =>
-    article.title?.toLowerCase().includes(cat.toLowerCase())
-  )
+const filteredNews = ((newsPrefs||[]).length === 0
+  ? newsData?.articles
+  : newsData?.articles?.filter((article: any) =>
+      newsPrefs.some((cat: string) =>
+        article.title?.toLowerCase().includes(cat.toLowerCase())
+      )
+    )
 )?.slice(0, 3)
+
 
 
   return (
@@ -81,10 +89,12 @@ const filteredMovies = trendingData?.results?.filter((movie: any) =>
               <p>Loading...</p>
             ) : filteredNews?.length ? (
               filteredNews.map((article: any, i: number) => (
-                <div key={i} className="border p-4 rounded shadow-sm bg-white">
+                <Link href="/News">
+                <div key={i}  className="border p-4 rounded shadow-sm bg-white">
                   <h3 className="font-bold text-lg mb-2">{article.title}</h3>
                   <p className="text-sm text-gray-700">{article.description}</p>
                 </div>
+                </Link>
               ))
             ) : (
               <p className="text-gray-500">No news matching your interests.</p>
