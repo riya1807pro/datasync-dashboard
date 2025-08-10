@@ -18,7 +18,9 @@ export default function DashboardLayout({ children }: any) {
   }, [isSignedIn])
   return (
     <div>
-      <Navbar />
+     <nav className="bg-white dark:bg-gray-900 text-black dark:text-white">
+  <Navbar/>
+</nav>
       <div className="flex pt-14">
         <main className="flex-1 ml-0  bg-gray-100 min-h-screen p-4">
           {children}

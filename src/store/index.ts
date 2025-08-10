@@ -1,33 +1,56 @@
+// src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit'
-import { newsApi } from '@/features/news/newApi'
 import { movieApi } from '@/features/movies/movieApi'
-import preferencesReducer from '@/features/user/preferencesSlice' // ✅ Ye slice wala
+import { newsApi } from '@/features/news/newApi'
+import favoriteReducer from '@/features/favorite/favoriteSlice'
+import preferencesReducer from '@/features/user/preferencesSlice'
+import uiErrorReducer from '@/features/uiError/uiErrorSlice'
+import savedNewsReducer from '@/features/news/savedNewsSlice'
+import uiReducer from "@/features/ui/uiSlice"
 
-import { socialApi } from '@/features/social/SocialApi'
-import newsReducer from "../features/news/NewsSlice"
-import favoritesReducer from "../features/favorite/favoriteSlice"
-
+// configure store
 export const store = configureStore({
   reducer: {
-    userPreferences: preferencesReducer, // ✅ Correct slice
-    news: newsReducer,
-    favorites: favoritesReducer,
-    [newsApi.reducerPath]: newsApi.reducer,
+    ui : uiReducer,
+    favorites: favoriteReducer,
+    userPreferences: preferencesReducer,
+    uiError: uiErrorReducer,
+    savedNews: savedNewsReducer,
     [movieApi.reducerPath]: movieApi.reducer,
-    [socialApi.reducerPath]: socialApi.reducer,
+    [newsApi.reducerPath]: newsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      newsApi.middleware,
-      movieApi.middleware,
-      socialApi.middleware
-    ),
+    getDefaultMiddleware().concat(movieApi.middleware, newsApi.middleware),
 })
 
+// client-only localStorage sync
 if (typeof window !== 'undefined') {
+  // initial hydration for favorites & prefs
+  const storedFavs = localStorage.getItem('favorites')
+  if (storedFavs) {
+    try {
+      const parsed = JSON.parse(storedFavs)
+      store.dispatch({ type: 'favorites/setInitial', payload: parsed })
+    } catch {}
+  }
+
+  const storedPrefs = localStorage.getItem('userPreferences')
+  if (storedPrefs) {
+    try {
+      const parsed = JSON.parse(storedPrefs)
+      store.dispatch({ type: 'userPreferences/setInitial', payload: parsed })
+    } catch {}
+  }
+
   store.subscribe(() => {
     const state = store.getState()
-    localStorage.setItem('favorites', JSON.stringify(state.favorites.favorites))
+    try {
+      localStorage.setItem('favorites', JSON.stringify(state.favorites.favorites))
+      localStorage.setItem('userPreferences', JSON.stringify({
+        moviePrefs: state.userPreferences.moviePrefs,
+        newsPrefs: state.userPreferences.newsPrefs,
+      }))
+    } catch {}
   })
 }
 

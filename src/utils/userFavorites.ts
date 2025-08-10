@@ -1,20 +1,17 @@
 // src/utils/userFavorites.ts
-export function getUserLocalFavorites(userId?: string) {
+export const getUserLocalFavorites = (userId?: string) => {
   if (typeof window === 'undefined' || !userId) return []
   try {
     const raw = localStorage.getItem(`favorites_${userId}`)
     return raw ? JSON.parse(raw) : []
-  } catch (e) {
-    console.error('getUserLocalFavorites parse error', e)
+  } catch {
     return []
   }
 }
 
-export function setUserLocalFavorites(userId: string | undefined, favorites: any[]) {
+export const setUserLocalFavorites = (userId: string | undefined, favs: any[]) => {
   if (typeof window === 'undefined' || !userId) return
   try {
-    localStorage.setItem(`favorites_${userId}`, JSON.stringify(favorites))
-  } catch (e) {
-    console.error('setUserLocalFavorites error', e)
-  }
+    localStorage.setItem(`favorites_${userId}`, JSON.stringify(favs))
+  } catch {}
 }

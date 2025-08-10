@@ -5,30 +5,27 @@ interface FavoriteState {
   favorites: any[]
 }
 
-const initialState: FavoriteState = {
-  favorites: [],
-}
+const initialState: FavoriteState = { favorites: [] }
 
 const favoriteSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
-    toggleFavorite: (state, action: PayloadAction<any>) => {
-      const exists = state.favorites.some((m) => m.id === action.payload.id)
-      if (exists) {
-        state.favorites = state.favorites.filter((m) => m.id !== action.payload.id)
-      } else {
-        state.favorites.push(action.payload)
-      }
+    setInitial(state, action: PayloadAction<any[]>) {
+      state.favorites = Array.isArray(action.payload) ? action.payload : []
     },
-    setFavorites: (state, action: PayloadAction<any[]>) => {
-      state.favorites = action.payload
+    toggleFavorite(state, action: PayloadAction<any>) {
+      const movie = action.payload
+      if (!movie || !movie.id) return
+      const exists = state.favorites.find((m) => m.id === movie.id)
+      if (exists) state.favorites = state.favorites.filter((m) => m.id !== movie.id)
+      else state.favorites.push(movie)
     },
-    clearFavorites: (state) => {
+    clearFavorites(state) {
       state.favorites = []
     },
   },
 })
 
-export const { toggleFavorite, setFavorites, clearFavorites } = favoriteSlice.actions
+export const { toggleFavorite, setInitial, clearFavorites } = favoriteSlice.actions
 export default favoriteSlice.reducer

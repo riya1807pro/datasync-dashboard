@@ -11,7 +11,6 @@ const navLinks = [
   { name: 'Home', path: '/', icon: <Home size={18} /> },
   { name: 'Movies', path: '/Movie', icon: <Film size={18} /> },
   { name: 'News', path: '/News', icon: <Newspaper size={18} /> },
-  { name: 'Social', path: '/Social', icon: <Users size={18} /> },
 ]
 
 export default function Sidebar() {

@@ -1,47 +1,43 @@
+// src/features/user/preferencesSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface PrefState {
+type PrefState = {
   moviePrefs: string[]
   newsPrefs: string[]
 }
 
-const loadPrefs = (): PrefState => {
-  if (typeof window !== 'undefined') {
-    try {
-      const saved = localStorage.getItem('userPreferences')
-      if (saved) return JSON.parse(saved)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-  return { moviePrefs: [], newsPrefs: [] }
+const initialState: PrefState = {
+  moviePrefs: [],
+  newsPrefs: [],
 }
-
-const initialState: PrefState = loadPrefs()
 
 const preferencesSlice = createSlice({
   name: 'userPreferences',
   initialState,
   reducers: {
+    setInitial(state, action: PayloadAction<Partial<PrefState>>) {
+      state.moviePrefs = Array.isArray(action.payload.moviePrefs) ? action.payload.moviePrefs : state.moviePrefs
+      state.newsPrefs = Array.isArray(action.payload.newsPrefs) ? action.payload.newsPrefs : state.newsPrefs
+    },
     toggleMoviePref(state, action: PayloadAction<string>) {
-      const idx = state.moviePrefs.indexOf(action.payload)
+      const v = action.payload
+      if (!Array.isArray(state.moviePrefs)) state.moviePrefs = []
+      const idx = state.moviePrefs.indexOf(v)
       if (idx >= 0) state.moviePrefs.splice(idx, 1)
-      else state.moviePrefs.push(action.payload)
-      localStorage.setItem('userPreferences', JSON.stringify(state))
+      else state.moviePrefs.push(v)
     },
     toggleNewsPref(state, action: PayloadAction<string>) {
-      const idx = state.newsPrefs.indexOf(action.payload)
+      const v = action.payload
+      if (!Array.isArray(state.newsPrefs)) state.newsPrefs = []
+      const idx = state.newsPrefs.indexOf(v)
       if (idx >= 0) state.newsPrefs.splice(idx, 1)
-      else state.newsPrefs.push(action.payload)
-      localStorage.setItem('userPreferences', JSON.stringify(state))
+      else state.newsPrefs.push(v)
     },
-    setPrefs(state, action: PayloadAction<PrefState>) {
-      state.moviePrefs = action.payload.moviePrefs
-      state.newsPrefs = action.payload.newsPrefs
-      localStorage.setItem('userPreferences', JSON.stringify(state))
-    }
-  }
+    clearPrefs(state) {
+      state.moviePrefs = []; state.newsPrefs = []
+    },
+  },
 })
 
-export const { toggleMoviePref, toggleNewsPref, setPrefs } = preferencesSlice.actions
+export const { toggleMoviePref, toggleNewsPref, setInitial, clearPrefs } = preferencesSlice.actions
 export default preferencesSlice.reducer

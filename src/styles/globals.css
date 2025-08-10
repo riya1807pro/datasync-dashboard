@@ -1,2 +1,10 @@
-/* Tailwind base styles */
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* custom styles */
+html, body, #__next {
+  height: 100%;
+}
+body {
+  background-color: #f9fafb;
+  color: #111827;
+}
