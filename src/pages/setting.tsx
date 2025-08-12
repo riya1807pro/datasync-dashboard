@@ -24,8 +24,8 @@ export default function SettingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 space-y-8">
-        <h1 className="text-3xl font-bold">⚙ Settings</h1>
+      <div className="p-6 space-y-8 bg-white dark:bg-gray-900 rounded">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">⚙ Settings</h1>
 
         {/* Theme */}
         <div>

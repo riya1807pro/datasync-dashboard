@@ -1,11 +1,11 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
-import '@/styles/globals.css';
+import '@/styles/globals.css'
 import { AppProps } from 'next/app';
 import { Provider } from "react-redux";
 import { store } from '@/store';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import ThemeProvider from '@/providers/ThemeProvider'; // ✅ new import
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -14,10 +14,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <Provider store={store}>
           <ErrorBoundary>
-        <ThemeProvider> {/* ✅ ThemeProvider wrap */}
-            <Component {...pageProps} />
+         <ThemeProvider attribute="class" defaultTheme="light">
+          <Component {...pageProps}/>
         </ThemeProvider>
-          </ErrorBoundary>
+        </ErrorBoundary>
       </Provider>
     </ClerkProvider>
   );

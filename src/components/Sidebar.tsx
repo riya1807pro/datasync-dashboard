@@ -11,6 +11,8 @@ const navLinks = [
   { name: 'Home', path: '/', icon: <Home size={18} /> },
   { name: 'Movies', path: '/Movie', icon: <Film size={18} /> },
   { name: 'News', path: '/News', icon: <Newspaper size={18} /> },
+  { name: 'Favorites', path: '/Favorite', icon: <Users size={18} /> },
+  { name: 'Settings', path: '/setting', icon: <Users size={18} /> },
 ]
 
 export default function Sidebar() {
@@ -24,7 +26,7 @@ export default function Sidebar() {
     <>
       {/* Toggle Button (always visible) */}
       <button
-        className="fixed top-2 left-2 z-50 bg-gray-900 text-white p-2 rounded"
+        className="fixed top-2 left-2 z-50 bg-gray-200 text-white p-2 rounded"
         onClick={toggleCollapse}
       >
         {collapsed ? <Menu size={18} /> : <X size={18} />}
@@ -41,7 +43,7 @@ export default function Sidebar() {
         onResizeStop={(e, data) => {
           setWidth(data.size.width)
         }}
-        className="fixed top-0 left-0 h-screen z-40 bg-gray-900 text-white transition-all ease-in-out duration-300 overflow-hidden"
+        className="fixed top-0 left-0 h-screen z-40 bg-gray-200 text-white transition-all ease-in-out duration-300 overflow-hidden"
       >
         <div className={classNames('h-full flex flex-col', collapsed ? 'w-16' : 'w-full')}>
           <div className="p-4 text-xl font-bold border-b border-gray-700">
