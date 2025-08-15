@@ -13,7 +13,7 @@ const categories = ['all', 'technology', 'business', 'sports', 'health', 'entert
 export default function NewsPage() {
   const category = useSelector((state: any) => state.news?.category)
   const dispatch = useDispatch()
-  const selectedCategory = category === 'all' ? '' : category
+  const selectedCategory = category === 'all' ? 'general' : category
   const { data, isLoading } = useGetTopHeadlinesQuery(selectedCategory)
 
   const [selectedArticle, setSelectedArticle] = useState<any | null>(null)

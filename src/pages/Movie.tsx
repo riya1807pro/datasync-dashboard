@@ -9,6 +9,7 @@ import MovieCard from "@/components/MovieCard"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { useUser } from "@clerk/nextjs"
 import useDebounce from "@/components/useDebounce"
+import ProtectedPage from "@/components/ProtectedPage"
 
 export default function Movies() {
   const { isSignedIn } = useUser()
@@ -21,13 +22,6 @@ export default function Movies() {
     skip: !selectedGenre,
   })
 
-  if (!isSignedIn) {
-    return (
-      <DashboardLayout>
-        <div className="p-6">Please sign in to view movies.</div>
-      </DashboardLayout>
-    )
-  }
 
   const movieList = selectedGenre
     ? genreMoviesData?.results
@@ -39,6 +33,7 @@ const filteredMovies = movieList?.filter((m:any) => m.title.toLowerCase().includ
 
   return (
     <DashboardLayout>
+      <ProtectedPage>
       <div className="p-6 w-full">
         <h2 className="text-3xl font-bold mb-4">🎬 Movies</h2>
 
@@ -50,7 +45,7 @@ const filteredMovies = movieList?.filter((m:any) => m.title.toLowerCase().includ
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none"
-          />
+            />
 
           <select
             value={selectedGenre}
@@ -73,6 +68,7 @@ const filteredMovies = movieList?.filter((m:any) => m.title.toLowerCase().includ
           ))}
         </div>
       </div>
+      </ProtectedPage>
     </DashboardLayout>
   )
 }

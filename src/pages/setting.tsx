@@ -1,69 +1,64 @@
-// src/pages/setting.tsx
 'use client'
 import DashboardLayout from '@/layouts/DashboardLayout'
-import { useDispatch, useSelector } from 'react-redux'
-import { setTheme, setLanguage } from '@/features/user/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/store'
+import { toggleMoviePref, toggleNewsPref } from '@/features/user/preferencesSlice'
+import ProtectedPage from '@/components/ProtectedPage'
 
 export default function SettingsPage() {
   const dispatch = useDispatch()
-  const { theme, language } = useSelector((state: RootState) => state.userPreferences)
+  const { moviePrefs, newsPrefs } = useSelector((state: RootState) => state.userPreferences)
 
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setTheme(e.target.value))
-    if (e.target.value === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setLanguage(e.target.value))
-  }
+  const movieGenres = ["Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi", "Thriller", "Animation"]
+  const newsCategories = ["Technology", "Business", "Sports", "Entertainment", "Health", "Science", "World"]
 
   return (
     <DashboardLayout>
-      <div className="p-6 space-y-8">
-        <h1 className="text-3xl font-bold">⚙ Settings</h1>
+      <ProtectedPage>
+      <div className="bg-card rounded shadow p-6 max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold accent mb-8">⚙ User Preferences</h1>
 
-        {/* Theme */}
-        <div>
-          <label className="block font-semibold mb-2">Theme</label>
-          <select
-            value={theme}
-            onChange={handleThemeChange}
-            className="border p-2 rounded w-52"
-          >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
+        {/* Movies */}
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold accent mb-4">🎬 Preferred Movie Genres</h2>
+          <div className="flex flex-wrap gap-3">
+            {movieGenres.map((genre) => (
+              <button
+                key={genre}
+                onClick={() => dispatch(toggleMoviePref(genre))}
+                className={`px-4 py-2 rounded border border-theme font-medium transition ${
+                  moviePrefs.includes(genre)
+                    ? 'bg-accent text-white'
+                    : 'bg-card text-muted hover:bg-accent-2/10'
+                }`}
+              >
+                {genre}
+              </button>
+            ))}
+          </div>
+        </section>
 
-        {/* Language */}
-        <div>
-          <label className="block font-semibold mb-2">Language</label>
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="border p-2 rounded w-52"
-          >
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-          </select>
-        </div>
-
-        {/* Saved Items */}
-        <div>
-          <label className="block font-semibold mb-2">Saved Items</label>
-          <button
-            onClick={() => alert('Show saved movies & news here')}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            See Saved
-          </button>
-        </div>
+        {/* News */}
+        <section>
+          <h2 className="text-xl font-semibold accent mb-4">📰 Preferred News Categories</h2>
+          <div className="flex flex-wrap gap-3">
+            {newsCategories.map((cat) => (
+              <button
+              key={cat}
+                onClick={() => dispatch(toggleNewsPref(cat))}
+                className={`px-4 py-2 rounded border border-theme font-medium transition ${
+                  newsPrefs.includes(cat)
+                    ? 'bg-accent text-white'
+                    : 'bg-card text-muted hover:bg-accent-2/10'
+                }`}
+                >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </section>
       </div>
+      </ProtectedPage>
     </DashboardLayout>
   )
 }
