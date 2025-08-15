@@ -1,4 +1,3 @@
-// src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit'
 import { movieApi } from '@/features/movies/movieApi'
 import { newsApi } from '@/features/news/newApi'
@@ -25,7 +24,6 @@ export const store = configureStore({
 
 // client-only localStorage sync
 if (typeof window !== 'undefined') {
-  // initial hydration for favorites & prefs
   const storedFavs = localStorage.getItem('favorites')
   if (storedFavs) {
     try {

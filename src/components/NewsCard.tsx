@@ -1,6 +1,4 @@
-// src/components/NewsCard.tsx
 'use client'
-<<<<<<< HEAD
 import React from 'react'
 
 type Props = {
@@ -8,8 +6,6 @@ type Props = {
   onOpen: (a: any) => void
 }
 
-=======
->>>>>>> 3f1c363bb1e3c0938fb63bc0fb6bee5aeca32484
 export default function NewsCard({ article }: any) {
   return (
     <div className="bg-card border border-theme rounded shadow p-4 flex flex-col">

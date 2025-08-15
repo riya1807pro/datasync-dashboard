@@ -1,4 +1,3 @@
-// src/utils/userFavorites.ts
 export const getUserLocalFavorites = (userId?: string) => {
   if (typeof window === 'undefined' || !userId) return []
   try {

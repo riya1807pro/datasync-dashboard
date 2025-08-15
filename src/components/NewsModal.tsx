@@ -1,4 +1,3 @@
-// src/components/NewsModal.tsx
 'use client'
 import React, { useEffect } from 'react'
 

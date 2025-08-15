@@ -1,4 +1,3 @@
-// src/features/news/savedNewsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type State = { articles: any[] }

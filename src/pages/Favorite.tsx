@@ -14,10 +14,8 @@ export default function FavoritesPage() {
   const favorites = useSelector((state: any) => state.favorites.favorites)
   const [isClient, setIsClient] = useState(false)
 
-  // avoid hydration mismatch
   useEffect(() => setIsClient(true), [])
 
-  // load localStorage favorites → redux (only after sign-in)
   useEffect(() => {
     if (isSignedIn && user?.id) {
       const localFav = getUserLocalFavorites(user.id)

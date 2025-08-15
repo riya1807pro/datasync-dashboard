@@ -1,4 +1,3 @@
-// src/features/uiError/uiErrorSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const slice = createSlice({

@@ -1,4 +1,3 @@
-// src/components/ErrorState.tsx
 'use client'
 export default function ErrorState({ message = 'Something went wrong', onRetry }: { message?: string; onRetry?: () => void }) {
   return (

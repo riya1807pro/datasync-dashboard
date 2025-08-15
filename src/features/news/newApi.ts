@@ -1,4 +1,3 @@
-// src/store/services/newsApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY as string;

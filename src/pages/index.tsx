@@ -1,6 +1,11 @@
 'use client'
 import DashboardLayout from '@/layouts/DashboardLayout'
 import { useSelector } from 'react-redux'
+import { SignedIn, SignInButton, UserButton, useUser } from '@clerk/nextjs'
+import { useGetTopHeadlinesQuery } from '@/features/news/newApi'
+import { useGetTrendingMoviesQuery } from '@/features/movies/movieApi'
+import Link from 'next/link'
+import MovieCard from '@/components/MovieCard'
 
 export default function Home() {
   const { moviePrefs, newsPrefs } = useSelector((state: any) => state.userPreferences)
@@ -8,7 +13,6 @@ export default function Home() {
   const { data: trendingData, isLoading: loadingMovies } = useGetTrendingMoviesQuery()
   const { data: newsData, isLoading: loadingNews } = useGetTopHeadlinesQuery('all')
 
-  // ✅ Genre ID to Name
   function getGenreNameFromId(id: number): string {
     const genreMap: Record<number, string> = {
       28: 'Action',
@@ -21,7 +25,6 @@ export default function Home() {
     return genreMap[id] || ''
   }
 
-  // ✅ Filter Movies
 const filteredMovies = ((moviePrefs || []).length === 0
   ? trendingData?.results
   : trendingData?.results?.filter((movie: any) =>
@@ -32,7 +35,6 @@ const filteredMovies = ((moviePrefs || []).length === 0
 )?.slice(0, 6)
 
 
-  // ✅ Filter News
 const filteredNews = ((newsPrefs||[]).length === 0
   ? newsData?.articles
   : newsData?.articles?.filter((article: any) =>
@@ -42,11 +44,31 @@ const filteredNews = ((newsPrefs||[]).length === 0
     )
 )?.slice(0, 3)
 
-
+const { isSignedIn } = useUser()
 
   return (
     <DashboardLayout>
-      <div className="space-y-10">
+      <div className="space-y-1">
+         <section className="relative bg-card rounded shadow p-8 mb-8 flex flex-col items-center justify-center text-center overflow-hidden min-w-full min-h-[300px]">
+        <img
+          src="/hero.jpeg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+        />
+        <div className="relative z-10">
+          <h1 className="text-5xl md:text-6xl font-bold accent mb-4">Welcome to DashSync</h1>
+          <p className="text-muted font-bold text-xl mb-6">Your personalized hub for trending movies and top news.</p>
+        </div>
+       {isSignedIn ? (
+          <Link href="/Movie">
+            <button className="px-3 py-1 rounded bg-accent text-white" >Get started</button>
+          </Link>
+        ) : (
+          <SignInButton mode="modal">
+            <button className="px-3 py-1 rounded bg-accent text-white">Sign In</button>
+          </SignInButton>
+        )}
+      </section>
         {/* 🔥 Trending Movies */}
         <section>
           <div className="flex justify-between items-center mb-4">

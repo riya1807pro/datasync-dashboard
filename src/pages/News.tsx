@@ -1,4 +1,3 @@
-// src/pages/News.tsx
 'use client'
 import { useState } from 'react'
 import { useGetTopHeadlinesQuery } from '@/features/news/newApi'
