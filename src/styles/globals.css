@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
+<<<<<<< HEAD
 /* custom styles */
+=======
+/* Theme variables */
+>>>>>>> 3f1c363bb1e3c0938fb63bc0fb6bee5aeca32484
 :root {
   --bg: #f7fafc;
   --card-bg: #ffffff;

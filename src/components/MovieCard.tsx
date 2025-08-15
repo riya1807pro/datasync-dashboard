@@ -67,43 +67,24 @@ export default function MovieCard({ movie }: Props) {
 
   return (
     <div
-      className="relative bg-white shadow rounded p-2 transition-all"
+      key={movie.id}
+      className="bg-card border border-theme rounded shadow p-4 flex flex-col"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {showTrailer && trailer ? (
-        <div className="relative">
-          <iframe
-            width="100%"
-            height="250"
-            src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=${mute ? 1 : 0}`}
-            title="Movie Trailer"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            className="rounded"
-          />
-          <button
-            onClick={(e) => { e.stopPropagation(); setMute(!mute) }}
-            className="absolute bottom-2 right-2 bg-black text-white p-1 rounded-full"
-            aria-label={mute ? 'Unmute trailer' : 'Mute trailer'}
-          >
-            {mute ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </button>
-        </div>
-      ) : (
-        <img
-          src={movie?.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/fallback.jpg'}
-          alt={movie?.title || 'No title'}
-          className="rounded h-64 w-full object-cover"
-        />
-      )}
-
-      <div className="mt-2 flex justify-between items-center">
-        <h2 className="text-sm font-semibold line-clamp-2">{movie.title}</h2>
+      {/* Poster or trailer */}
+      <img
+        src={movie?.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/fallback.jpg'}
+        alt={movie?.title || 'No title'}
+        className="rounded h-64 w-full object-cover mb-2"
+      />
+      <div className="flex justify-between items-center mt-2">
+        <h2 className="text-base font-semibold accent">{movie.title}</h2>
         <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(); }}>
-          <Heart className={`w-5 h-5 transition ${isFav ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
+          <Heart className={`w-5 h-5 transition ${isFav ? 'text-red-500 fill-red-500' : 'text-muted'}`} />
         </button>
       </div>
+      <p className="text-xs text-muted mt-1">{movie.release_date}</p>
     </div>
   )
 }
