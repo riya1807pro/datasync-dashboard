@@ -1,20 +1,19 @@
-import { clerkClient } from "@clerk/backend";
+
+import { getUserLocalFavorites, setUserLocalFavorites } from "./userFavorites";
 
 export async function getUserFavorites(userId: string) {
   try {
-    const user = await clerkClient.users.getUser(userId);
-    return (user.publicMetadata?.favorites as any[]) || [];
+    return getUserLocalFavorites(userId);
   } catch (err) {
     console.error("Get favorites failed:", err);
     return [];
   }
 }
 
+
 export async function updateUserFavorites(userId: string, favorites: any[]) {
   try {
-    await clerkClient.users.updateUserMetadata(userId, {
-      publicMetadata: { favorites },
-    });
+    setUserLocalFavorites(userId, favorites);
   } catch (err) {
     console.error("Update favorites failed:", err);
   }
