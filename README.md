@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 DashSync – Personalized Dashboard for Movies & News
 
-## Getting Started
+DashSync is a *Next.js + TypeScript* web application that aggregates *trending movies* and *top news articles, personalised to each user’s **preferences* (genre + category) and *authentication*.
 
-First, run the development server:
+🙋 Built as an assignment for *Software Development Engineer – Frontend (Unthinkable Solutions)*  
+🛠 Fully responsive, production-ready and extensible.
+
+---
+
+## ✅ Features
+
+| Feature | Status |
+|--------|--------|
+| 🔐 User Authentication (Clerk) | ✅ |
+| 😍 Add / Remove Favorites | ✅ Per-user (Local + Clerk) |
+| ⚙ User Preference Panel | ✅ Movie & News Preferences |
+| 🔥 Trending Movies Feed | ✅ |
+| 📰 Top News Feed | ✅ |
+| 🧠 Personalized Home | ✅ Based on Preferences |
+| 🌓 Light / Soft-Dark Theme | ✅ Toggle in Navbar |
+| 🔎 Debounced Movie Search | ✅ |
+| 🎞 Hover Trailer (Movies) | ✅ Plays after 2s hover |
+| 💬 News Modal | ✅ Opens article without redirect |
+| 🛡 Protected Routes | ✅ Favorites, Movies, Settings |
+
+---
+
+## 🧱 Tech Stack
+
+- *Next.js 15* (Pages router)
+- *TypeScript*
+- *TailwindCSS*
+- *Redux Toolkit* + *RTK Query*
+- *Clerk* (Auth + user management)
+- *NewsAPI / TMDB API*
+- *Framer Motion*
+- *React hooks / debounce*
+
+---
+
+## ⚙ Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+git clone https://github.com/<your-username>/dashsync-dashboard.git
+cd datasync-dashboard
+bun install              # or npm / yarn
+bun dev                  # runs at http://localhost:3000
+````
+## 📁 Folder Structure
+````
+src/
+├─ app/
+│  └─ layout.tsx
+├─ pages/
+│  ├─ index.tsx         // Home
+│  ├─ Movie.tsx
+│  ├─ News.tsx
+│  ├─ Favorite.tsx
+│  └─ setting.tsx
+├─ layouts/
+│  └─ DashboardLayout.tsx
+├─ components/
+│  ├─ Navbar.tsx
+│  ├─ MovieCard.tsx
+│  ├─ NewsCard.tsx
+│  ├─ NewsModal.tsx
+│  ├─ ErrorBoundary.tsx
+│  ├─ ProtectedPage.tsx
+│  └─ Loader.tsx
+└─ features/
+   ├─ movies/
+   ├─ news/
+   ├─ favorite/
+   └─ user/
+````
+📸 Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Visit Live : 
+ https://dashsync.vercel.app
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+👩‍💻 Author
 
-To learn more about Next.js, take a look at the following resources:
+Riya Kaushik – Frontend Developer
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+📫 riya1807pro@gmail.com
+🔗 https://github.com/riya1807pro
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⭐ If you like the project, please consider giving it a star
