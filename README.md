@@ -75,8 +75,10 @@ src/
 ````
 📸 Demo
 
+(![preview](image-1.png))
+
 > Visit Live : 
- https://dashsync.vercel.app
+[ https://dashsync.vercel.app](https://datasync-dashboard.vercel.app/)
 
 
 ---
