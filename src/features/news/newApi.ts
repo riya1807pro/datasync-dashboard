@@ -17,7 +17,7 @@ export const newsApi = createApi({
       query: (category: string) => {
         let url : string = `top-headlines?country=${DEFAULT_COUNTRY}`;
         if (category && category !== 'all') {
-          url += `&category=${category};`
+          url += `&category=${category}`
         }
         return url;
       },
