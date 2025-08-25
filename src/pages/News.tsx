@@ -7,13 +7,12 @@ import DashboardLayout from '@/layouts/DashboardLayout'
 import NewsCard from '@/components/NewsCard'
 import NewsModal from '@/components/NewsModal'
 
-const categories = ['all', 'technology', 'business', 'sports', 'health', 'entertainment']
+const categories = ['all', 'technology', 'business', 'sports', 'health', 'entertainment', 'general']
 
 export default function NewsPage() {
   const category = useSelector((state: any) => state.news?.category)
   const dispatch = useDispatch()
-  const selectedCategory = category === 'all' ? 'general' : category
-  const { data, isLoading } = useGetTopHeadlinesQuery(selectedCategory)
+  const { data, isLoading, error } = useGetTopHeadlinesQuery(category)
 
   const [selectedArticle, setSelectedArticle] = useState<any | null>(null)
 
@@ -34,15 +33,14 @@ export default function NewsPage() {
           ))}
         </div>
 
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="grid md:grid-cols-3 gap-4">
-            {data?.articles?.map((article: any, i: number) => (
-              <NewsCard key={i} article={article} onOpen={setSelectedArticle} />
-            ))}
-          </div>
-        )}
+        {isLoading && <p>Loading...</p>}
+        {error && <p className="text-red-500">Failed to load news</p>}
+
+        <div className="grid md:grid-cols-3 gap-4">
+          {data?.articles?.map((article: any, i: number) => (
+            <NewsCard key={i} article={article} onOpen={setSelectedArticle} />
+          ))}
+        </div>
 
         {selectedArticle && <NewsModal article={selectedArticle} onClose={() => setSelectedArticle(null)} />}
       </div>

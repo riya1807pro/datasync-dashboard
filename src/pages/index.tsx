@@ -108,14 +108,14 @@ const { isSignedIn } = useUser()
             ) : filteredNews?.length ? (
               filteredNews.map((article: any, i: number) => (
                 <Link href="/News">
-                <div key={i}  className="border p-4 rounded shadow-sm bg-white">
+                <div key={article.url}  className="border p-4 rounded shadow-sm bg-white">
                   <h3 className="font-bold text-lg mb-2">{article.title}</h3>
                   <p className="text-sm text-gray-700">{article.description}</p>
                 </div>
                 </Link>
               ))
             ) : (
-              <p className="text-gray-500">{`isSignedIn ? 'ign in to see preference news.' : ' No news matching your interests.`}</p>
+              <p className="text-gray-500">Please set the preferences for news."</p>
             )}
           </div>
         </section>
