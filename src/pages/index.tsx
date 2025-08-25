@@ -115,7 +115,7 @@ const { isSignedIn } = useUser()
                 </Link>
               ))
             ) : (
-              <p className="text-gray-500">No news matching your interests.</p>
+              <p className="text-gray-500">{`isSignedIn ? 'ign in to see preference news.' : ' No news matching your interests.`}</p>
             )}
           </div>
         </section>
