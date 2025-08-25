@@ -11,8 +11,8 @@ export default function Home() {
   const { moviePrefs, newsPrefs } = useSelector((state: any) => state.userPreferences)
 
   const { data: trendingData, isLoading: loadingMovies } = useGetTrendingMoviesQuery()
-  const { data: newsData, isLoading: loadingNews } = useGetTopHeadlinesQuery('all')
-
+const selectedCategory = 'general' // ✅ default
+const { data: newsData, isLoading: loadingNews } = useGetTopHeadlinesQuery(selectedCategory)
   function getGenreNameFromId(id: number): string {
     const genreMap: Record<number, string> = {
       28: 'Action',
@@ -108,7 +108,7 @@ const { isSignedIn } = useUser()
             ) : filteredNews?.length ? (
               filteredNews.map((article: any, i: number) => (
                 <Link href="/News">
-                <div key={article.url}  className="border p-4 rounded shadow-sm bg-white">
+                <div key={i} className="border p-4 rounded shadow-sm bg-white">
                   <h3 className="font-bold text-lg mb-2">{article.title}</h3>
                   <p className="text-sm text-gray-700">{article.description}</p>
                 </div>

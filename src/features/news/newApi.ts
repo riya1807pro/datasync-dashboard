@@ -1,27 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY as string;
-const BASE_URL = 'https://newsapi.org/v2/';
-const DEFAULT_COUNTRY = process.env.NEXT_PUBLIC_NEWS_API_DEFAULT_COUNTRY || 'us';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const newsApi = createApi({
-  reducerPath: 'newsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-    prepareHeaders: (headers) => {
-      headers.set('X-Api-Key', API_KEY || '');
-      return headers;
-    },
-  }),
+  reducerPath: "newsApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/api" }), 
   endpoints: (builder) => ({
-    getTopHeadlines: builder.query({
-      query: (category: string) => {
-        let url = `top-headlines?country=${DEFAULT_COUNTRY}`;
-        if (category && category !== 'all') {
-          url += `&category=${category}`;
-        }
-        return url;
-      },
+    getTopHeadlines: builder.query<any, string>({
+      query: (category: string) =>
+       `news?category=${category || "general"}&country=us`,
     }),
   }),
 });
