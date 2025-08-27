@@ -1,9 +1,27 @@
 # 🚀 DashSync – Personalized Dashboard for Movies & News
 
-DashSync is a *Next.js + TypeScript* web application that aggregates *trending movies* and *top news articles, personalised to each user’s **preferences* (genre + category) and *authentication*.
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) [![Next.js](https://img.shields.io/badge/Next.js-13-blue?logo=next.js)](https://nextjs.org/) [![React](https://img.shields.io/badge/React-18-blue?logo=react)](https://reactjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue?logo=typescript)](https://www.typescriptlang.org/) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.3-blue?logo=tailwind-css)](https://tailwindcss.com/)
 
-🙋 Built as an assignment for *Software Development Engineer – Frontend (Unthinkable Solutions)*  
-🛠 Fully responsive, production-ready and extensible.
+DashSync is a **Next.js + TypeScript** web application that aggregates **trending movies** and **top news articles**, personalized to each user’s **preferences** (genre + category) with **authentication**.
+
+🙋 Built as an assignment for **Software Development Engineer – Frontend (Unthinkable Solutions)**  
+🛠 Fully responsive, production-ready, and extensible.
+
+---
+
+## 👩‍💻 Author
+
+**Riya Kaushik – Frontend Developer**  
+📍 Karnal, Haryana  
+📧 [riyakaushik6410@gmail.com](mailto:riyakaushik6410@gmail.com)  
+📱 +91 89309 42202  
+🔗 [GitHub](https://github.com/riya1807pro) • [LinkedIn](https://www.linkedin.com/in/riyakaushik-webdev)  
+
+---
+
+## 🌟 Live & Code
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://datasync-dashboard.vercel.app) [![GitHub Code](https://img.shields.io/badge/GitHub-Code-blue)](https://github.com/riya1807pro/riya1807pro-datasync-dashboard)
 
 ---
 
@@ -25,72 +43,93 @@ DashSync is a *Next.js + TypeScript* web application that aggregates *trending m
 
 ---
 
-## 🧱 Tech Stack
+## 🛠️ Tech Stack
 
-- *Next.js 15* (Pages router)
-- *TypeScript*
-- *TailwindCSS*
-- *Redux Toolkit* + *RTK Query*
-- *Clerk* (Auth + user management)
-- *NewsAPI / TMDB API*
-- *Framer Motion*
-- *React hooks / debounce*
+- **Frontend:** Next.js 15 (Pages Router), React 18, TypeScript  
+- **State Management:** Redux Toolkit + RTK Query  
+- **Authentication:** Clerk  
+- **APIs:** NewsAPI, TMDB API  
+- **UI & Animation:** TailwindCSS, Framer Motion  
+- **Other:** React hooks, debounce utilities  
 
 ---
 
-## ⚙ Setup
+## 📁 Folder Structure
 
-```bash
-git clone https://github.com/<your-username>/dashsync-dashboard.git
-cd datasync-dashboard
+```text
+riya1807pro-datasync-dashboard/
+├─ README.md
+├─ eslint.config.mjs
+├─ middleware.ts
+├─ next.config.ts
+├─ package.json
+├─ postcss.config.js
+├─ tailwind.config.js
+├─ tsconfig.json
+└─ src/
+   ├─ app/layout.tsx
+   ├─ components/
+   │  ├─ Error.tsx
+   │  ├─ ErrorBoundary.tsx
+   │  ├─ errorSlice.tsx
+   │  ├─ Loadert.jsx
+   │  ├─ MovieCard.tsx
+   │  ├─ Navbar.tsx
+   │  ├─ NewsCard.tsx
+   │  ├─ NewsModal.tsx
+   │  ├─ ProtectedPage.tsx
+   │  ├─ Sidebar.tsx
+   │  └─ useDebounce.ts
+   ├─ features/
+   │  ├─ favorite/favoriteSlice.ts
+   │  ├─ movies/movieApi.tsx
+   │  ├─ news/newApi.ts
+   │  ├─ news/NewsSlice.ts
+   │  ├─ news/savedNewsSlice.ts
+   │  ├─ ui/globalErrorSlice.ts
+   │  ├─ ui/uiSlice.ts
+   │  ├─ uiError/uiErrorSlice.ts
+   │  └─ user/
+   │       ├─ preferencesSlice.ts
+   │       ├─ UserApi.ts
+   │       └─ userSlice.ts
+   ├─ layouts/DashboardLayout.tsx
+   ├─ pages/
+   │  ├─ _app.tsx
+   │  ├─ Favorite.tsx
+   │  ├─ index.tsx
+   │  ├─ Movie.tsx
+   │  ├─ News.tsx
+   │  ├─ setting.tsx
+   │  ├─ SignUp.tsx
+   │  ├─ api/favorites.ts
+   │  ├─ api/news.ts
+   │  └─ SignIn/[[...index]].tsx
+   ├─ providers/ThemeProvider.tsx
+   ├─ store/index.ts
+   ├─ styles/globals.css
+   ├─ types/
+   │    ├─ movieType.ts
+   │    └─ NewsArtcle.ts
+   └─ utils/
+        ├─ clerkFavorites.ts
+        └─ userFavorites.ts
+```
+## ⚙ Setup
+```
+git clone https://github.com/riya1807pro/riya1807pro-datasync-dashboard.git
+cd riya1807pro-datasync-dashboard
 bun install              # or npm / yarn
 bun dev                  # runs at http://localhost:3000
-````
-## 📁 Folder Structure
-````
-src/
-├─ app/
-│  └─ layout.tsx
-├─ pages/
-│  ├─ index.tsx         // Home
-│  ├─ Movie.tsx
-│  ├─ News.tsx
-│  ├─ Favorite.tsx
-│  └─ setting.tsx
-├─ layouts/
-│  └─ DashboardLayout.tsx
-├─ components/
-│  ├─ Navbar.tsx
-│  ├─ MovieCard.tsx
-│  ├─ NewsCard.tsx
-│  ├─ NewsModal.tsx
-│  ├─ ErrorBoundary.tsx
-│  ├─ ProtectedPage.tsx
-│  └─ Loader.tsx
-└─ features/
-   ├─ movies/
-   ├─ news/
-   ├─ favorite/
-   └─ user/
-````
-📸 Demo
 
-(![preview](image-1.png))
+```
 
-> Visit Live : 
-[ https://dashsync.vercel.app](https://datasync-dashboard.vercel.app/)
+📸 Demo Screenshots
 
+Visit Live: https://datasync-dashboard.vercel.app
 
 ---
 
-👩‍💻 Author
-
-Riya Kaushik – Frontend Developer
-
-📫 riya1807pro@gmail.com
-🔗 https://github.com/riya1807pro
-
-
----
-
-⭐ If you like the project, please consider giving it a star
+⭐ If you like this project, please consider giving it a star on GitHub!  
+💬 Feedback, suggestions, or collaborations are always welcome.  
+🚀 Built with ❤️ by **Riya Kaushik**
